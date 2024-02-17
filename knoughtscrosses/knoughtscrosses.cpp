@@ -6,12 +6,13 @@
 int main()
 {
     bool win = false;
+    board* myboard = new board();
     while (!win)
     {
         int pos = 0;
         std::cout << "what position would you like to place your counter";
         std::cin >> pos;
-        board* myboard = new board();
+        
         myboard->setCounter(pos);
 
         win = myboard->checkallwin(pos);
@@ -20,6 +21,7 @@ int main()
             std::cout << "noice";
         }
         myboard->switchCounter();
+        myboard->presentBoard();
     }
  
 

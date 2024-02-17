@@ -1,15 +1,16 @@
 #include "board.h"
+#include <iostream>
 
 bool board::checkWin(int place,int decreaser)
 {
 	int lowestplace = place;
 	int bound = decreaser * 2;
-
-	while (lowestplace > bound)
+	while (lowestplace - decreaser >= 0)
 	{
 		lowestplace = lowestplace - decreaser;
 	}
-	for (int i = lowestplace; i < i + 6; i = i + decreaser)
+	
+	for (int i = lowestplace; i < (lowestplace+bound)+1; i = i + decreaser)
 	{
 		if (boardArr[i] != counter)
 		{
@@ -17,7 +18,6 @@ bool board::checkWin(int place,int decreaser)
 		}
 	}
 	return true;
-
 }
 
 void board::switchCounter()
@@ -40,14 +40,45 @@ void board::setCounter(int place)
 
 bool board::checkallwin(int place)
 {
-	for (int i = 1; i < 5; i=i+2)
+	bool key = false;
+	
+	if (checkWin(place, 1))
 	{
-		if (checkWin(place, i))
-		{
-			return true;
-		}
+		key=true;
+	}
+	if (checkWin(place, 3))
+	{
+		key = true;
 	}
 
+	if (checkWin(place, 4))
+	{
+		key = true;
+	}
+	if (key)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 
 	
+}
+
+void board::presentBoard()
+{
+	for (int i = 1; i < 10; i++)
+	{
+		if (i%3==0)
+		{
+			std::cout << boardArr[i-1] << std::endl;
+		}
+		else
+		{
+			std::cout << boardArr[i - 1];
+		}
+	
+	}
 }

@@ -17,7 +17,10 @@ public:
 	bool checkallwin(int place); 
 
 
+	void presentBoard();
+	
 
+	
 
 
 
