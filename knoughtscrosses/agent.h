@@ -3,6 +3,16 @@
 class agent
 
 {
+	int episodes = 0; 
+
+	std::vector<State*> episode; 
+
+
+	bool maxOrMin = true; 
+
+	float learningRate = 0.001;
+
+
 	State* node = new State();
 
 	int epsilon = 9;
@@ -15,16 +25,25 @@ class agent
 
 	void updateStateTree(int action);
 
-	void takeAction();
+	void takeAction(bool maxOrMin);
 
 	void decayEpsilon();
 
 	void backpropagate();
 
-	int takeGreedy();
+	int takeGreedy(bool maxOrMIn);
 
+	int takeExplore(); 
 
+	int maxGreed();
 
+	int minGreed(); 
+
+	void addToEpisode();
+
+	void refreshEpisode(); 
+
+	void increaseEpisodeCount();
 
 	
 

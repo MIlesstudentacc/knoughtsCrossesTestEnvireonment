@@ -8,17 +8,7 @@ void agent::updateStateTree(int action)
 		State* newState = new State();
 		newState->updateTransitions(action, newState);
 
-
-
-
-
 	}
-
-
-
-
-
-
 
 }
 
@@ -40,7 +30,16 @@ void agent::takeAction(bool maxOrMin)
 
 void agent::decayEpsilon()
 {
-
+	if (episodes >= 195312)//game tree complexity /10
+	{
+		if (epsilon > 1)
+		{
+			epsilon = epsilon - 1;
+			
+		}
+	}
+	episodes = 0;
+	
 
 }
 
@@ -65,7 +64,6 @@ int agent::takeGreedy(bool maxOrMin)
 int agent::takeExplore()
 {
 
-
 	srand((unsigned)time(NULL));
 
 	int random = rand() % currentState->getLegalMoveSize();
@@ -87,6 +85,49 @@ int agent::minGreed()
 		}
 	}
 	return min;
+}
+void agent::addToEpisode()
+{
+	episode.push_back(currentState);
+}
+void agent::refreshEpisode()
+{
+	episode.clear(); 
+}
+void agent::increaseEpisodeCount()
+{
+	episodes++;
+}
+void agent::monteCarlo()
+{
+	int start = episode.size();
+	
+
+	int iterator = start;
+
+	int count = 0;
+	
+	while (iterator > 0)
+	{
+		count++;
+		episode.at(iterator)->updateValue(1,discount,learningRate,count);
+		iterator = iterator - 2;
+			
+
+			
+	}
+	iterator = start - 1;
+	while (iterator > 0)
+	{
+		count++;
+		episode.at(iterator)->updateValue(-1, discount, learningRate, count);
+		iterator = iterator - 2;
+
+
+
+	}
+
+	
 }
 int agent::maxGreed() {
 	int* legalMoves = currentState->getLegalMoves();

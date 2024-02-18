@@ -3,11 +3,11 @@
 #include "board.h"
 class State
 {
-public:
+private:
 	State* transitions[9];
 
 	int* legalMoves;
-
+public:
 	
 	int value = 0;
 
@@ -25,7 +25,9 @@ public:
 
 	int* getLegalMoves();
 	
+	int getLegalMove(int move);
 
+	int updateValue(int reward,float discount);
 	
 };
 
