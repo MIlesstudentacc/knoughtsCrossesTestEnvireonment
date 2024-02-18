@@ -9,19 +9,22 @@ int main()
     board* myboard = new board();
     while (!win)
     {
+
         int pos = 0;
         std::cout << "what position would you like to place your counter";
         std::cin >> pos;
-        
-        myboard->setCounter(pos);
-
-        win = myboard->checkallwin(pos);
-        if (win)
+        if (myboard->legalMove(pos))
         {
-            std::cout << "noice";
+            myboard->setCounter(pos);
+
+            win = myboard->checkallwin(pos);
+            if (win)
+            {
+                std::cout << "noice";
+            }
+            myboard->switchCounter();
+            myboard->presentBoard();
         }
-        myboard->switchCounter();
-        myboard->presentBoard();
     }
  
 

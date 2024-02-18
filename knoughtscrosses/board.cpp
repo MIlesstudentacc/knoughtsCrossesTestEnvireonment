@@ -36,6 +36,7 @@ void board::switchCounter()
 void board::setCounter(int place)
 {
 	boardArr[place] = counter; 
+	legalMoves[place] = false; 
 }
 
 bool board::checkallwin(int place)
@@ -81,4 +82,9 @@ void board::presentBoard()
 		}
 	
 	}
+}
+
+bool board::legalMove(int place)
+{
+	return legalMoves[place];
 }
