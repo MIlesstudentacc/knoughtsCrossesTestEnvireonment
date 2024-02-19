@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "board.h"
+#include <iostream>
 class State
 {
 private:

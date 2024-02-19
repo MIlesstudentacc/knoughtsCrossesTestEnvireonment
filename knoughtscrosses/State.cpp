@@ -39,7 +39,7 @@ int State::getLegalMove(int move)
 
 void State::updateValue(int reward, float discount,float learningRate,int episodePos)
 {
-	value = learningRate * (reward * discount - value);
+	value = learningRate * (reward * (pow(discount,episodePos)) - value);
 
 }
 
@@ -59,8 +59,11 @@ void State::updateLegalMoves(board* myboard)
 	{
 		legalMoves[j] = tempStorage[j];
 	}
+	legalMoveLength = tempStorage.size();
+	std::cout << "\n";
+	std::cout << legalMoves[1] << std::endl;
 	
-
+	
 	
 	
 

@@ -105,14 +105,15 @@ void agent::increaseEpisodeCount()
 void agent::monteCarlo()
 {
 	int start = episode.size();
-	int iterator = start;
+	int iterator = start-1;
 	int count = 0;
 	
 	while (iterator > 0)
 	{
-		count++;
+		
 		episode.at(iterator)->updateValue(1,discount,learningRate,count);
 		iterator = iterator - 2;
+		count++;
 	}
 	iterator = start - 1;
 	while (iterator > 0)
