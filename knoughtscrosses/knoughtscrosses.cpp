@@ -2,34 +2,13 @@
 //
 #include "board.h"
 #include <iostream>
-
+#include "agent.h"
+#include "gameStarter.h"
 int main()
 {
-    bool win = false;
-    board* myboard = new board();
-    while (!win)
-    {
-
-        int pos = 0;
-        std::cout << "what position would you like to place your counter";
-        std::cin >> pos;
-        if (myboard->legalMove(pos))
-        {
-            myboard->setCounter(pos);
-
-            win = myboard->checkallwin(pos);
-            if (win)
-            {
-                std::cout << "noice";
-            }
-            myboard->switchCounter();
-            myboard->presentBoard();
-        }
-    }
- 
-
-    
-        
+    agent* thisAgent = new agent(); 
+    gameStarter* myStarter = new gameStarter(); 
+    myStarter->AISelfPlay(thisAgent);
 
 }
 

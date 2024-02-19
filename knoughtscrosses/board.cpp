@@ -88,3 +88,42 @@ bool board::legalMove(int place)
 {
 	return legalMoves[place];
 }
+
+void board::resetLegalMoves()
+{
+	for (int i = 0; i < 9; i++)
+	{
+		legalMoves[i] = true; 
+	}
+}
+
+void board::refreshBoardArr()
+{
+	for (int i = 0; i < 9; i++)
+	{
+		boardArr[i] = 0; 
+	}
+}
+
+bool board::checkDraw()
+{
+	for (int i = 0; i < 9; i++)
+	{
+		if (legalMoves[i] == true)
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+int board::getCounter()
+{
+	return counter;
+}
+
+void board::startNewGame()
+{
+	resetLegalMoves();
+	refreshBoardArr();
+}

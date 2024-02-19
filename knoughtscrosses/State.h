@@ -11,7 +11,7 @@ public:
 	
 	int value = 0;
 
-	void updateValue();
+	
 
 	int getValue();
 
@@ -27,7 +27,7 @@ public:
 	
 	int getLegalMove(int move);
 
-	int updateValue(int reward,float discount);
+	void updateValue(int reward,float discount,float learningRate,int episodePos);
 	
 };
 
