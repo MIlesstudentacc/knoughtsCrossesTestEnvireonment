@@ -86,6 +86,7 @@ void board::presentBoard()
 
 bool board::legalMove(int place)
 {
+	std::cout << place; 
 	return legalMoves[place];
 }
 

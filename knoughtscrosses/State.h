@@ -7,6 +7,8 @@ private:
 	State* transitions[9];
 
 	int* legalMoves;
+
+	int legalMoveLength;
 public:
 	
 	int value = 0;

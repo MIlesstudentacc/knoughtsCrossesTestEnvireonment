@@ -1,5 +1,6 @@
 #include "agent.h"
 #include <ctime>
+#include <iostream>
 
 void agent::updateStateTree(int action)
 {
@@ -69,8 +70,10 @@ int agent::takeGreedy(bool maxOrMin)
 int agent::takeExplore()
 {
 	srand((unsigned)time(NULL));
-	int random = rand() % currentState->getLegalMoveSize();
+	int legalMoveSize = currentState->getLegalMoveSize();
+	int random = rand() % legalMoveSize;
 	int move = currentState->getLegalMove(random);
+	std::cout << random << std::endl;
 	return move; 
 }
 

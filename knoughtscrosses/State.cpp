@@ -24,7 +24,7 @@ void State::updateTransitions(int transition,State* newState)
 
 int State::getLegalMoveSize()
 {
-	return sizeof(legalMoves) / sizeof(int);
+	return legalMoveLength;
 }
 
 int* State::getLegalMoves()
@@ -45,15 +45,23 @@ void State::updateValue(int reward, float discount,float learningRate,int episod
 
 void State::updateLegalMoves(board* myboard)
 {
+	int i = 0;
 	std::vector<int> tempStorage;
-	for (int i = 0; i < 9; i++)
+	for (i = 0; i < 9; i++)
 	{
 		if (myboard->legalMove(i))
 		{
 			tempStorage.push_back(i);
 		}
 	}
-	legalMoves = tempStorage.data();
+	legalMoves = new int[i];
+	for (int j = 0; j < tempStorage.size(); j++)
+	{
+		legalMoves[j] = tempStorage[j];
+	}
+	
+
+	
 	
 
 }

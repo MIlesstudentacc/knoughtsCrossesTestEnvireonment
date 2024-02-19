@@ -59,6 +59,6 @@ public:
 
 	void afterActionUpdates(); 
 
-	tate* getCurrentState(); 
+	State* getCurrentState(); 
 };
 

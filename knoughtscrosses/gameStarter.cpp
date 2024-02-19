@@ -33,6 +33,7 @@ void gameStarter::humanVsHuman()
 void gameStarter::AISelfPlay(agent* myAgent)
 {
     bool win = false; 
+    myAgent->getCurrentState()->updateLegalMoves(myboard);
     while (!win)
     {
         bool minOrMax = myboard->getCounter();
@@ -42,6 +43,7 @@ void gameStarter::AISelfPlay(agent* myAgent)
         {
             myboard->setCounter(pos);
             myAgent->afterActionUpdates();
+            myAgent->getCurrentState()->updateLegalMoves(myboard); 
 
             win = myboard->checkallwin(pos);
             if (win)
