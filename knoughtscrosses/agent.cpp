@@ -10,7 +10,9 @@ void agent::updateStateTree(int action)
 		State* newState = new State();
 		
 		lastState->updateTransitions(action, newState);
+		
 	}
+	currentState = lastState->getTransition(action);
 }
 
 
@@ -44,6 +46,7 @@ void agent::decayEpsilon()
 			
 		}
 	}
+	total_episodes = total_episodes + episodes;
 	episodes = 0;
 	
 
@@ -73,7 +76,7 @@ int agent::takeExplore()
 	int legalMoveSize = currentState->getLegalMoveSize();
 	int random = rand() % legalMoveSize;
 	int move = currentState->getLegalMove(random);
-	std::cout << random << std::endl;
+	
 	return move; 
 }
 
@@ -100,7 +103,7 @@ void agent::refreshEpisode()
 }
 void agent::increaseEpisodeCount()
 {
-	episodes++;
+	this->episodes = episodes++;
 }
 void agent::monteCarlo()
 {
@@ -140,6 +143,7 @@ void agent::agentCleanUp()
 	monteCarlo(); 
 	refreshEpisode(); 
 	currentState = node; 
+
 }
 void agent::afterActionUpdates()
 {
@@ -150,6 +154,10 @@ void agent::afterActionUpdates()
 State* agent::getCurrentState()
 {
 	return currentState;
+}
+int agent::getEpisodeCount()
+{
+	return total_episodes;
 }
 int agent::maxGreed() {
 	int* legalMoves = currentState->getLegalMoves();

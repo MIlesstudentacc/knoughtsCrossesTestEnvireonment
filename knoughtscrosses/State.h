@@ -10,8 +10,10 @@ private:
 	int* legalMoves;
 
 	int legalMoveLength;
-public:
+
 	
+public:
+	int id = 0;
 	int value = 0;
 
 	
@@ -31,6 +33,8 @@ public:
 	int getLegalMove(int move);
 
 	void updateValue(int reward,float discount,float learningRate,int episodePos);
+
+	State* getTransition(int action);
 	
 };
 

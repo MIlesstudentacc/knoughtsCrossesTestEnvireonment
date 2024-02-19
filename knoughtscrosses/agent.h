@@ -25,6 +25,8 @@ private:
 	int action = 0;
 
 	float discount = 0.5;
+
+	int total_episodes = 0;
 public:
 	void updateStateTree(int action);
 
@@ -60,5 +62,7 @@ public:
 	void afterActionUpdates(); 
 
 	State* getCurrentState(); 
+
+	int getEpisodeCount();
 };
 

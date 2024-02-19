@@ -9,6 +9,7 @@ int main()
     agent* thisAgent = new agent(); 
     gameStarter* myStarter = new gameStarter(); 
     myStarter->AISelfPlay(thisAgent);
+    myStarter->humanVSAi(thisAgent);
 
 }
 

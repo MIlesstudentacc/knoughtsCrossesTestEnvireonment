@@ -10,5 +10,7 @@ public:
 
 	void AISelfPlay(agent* myAgent);
 
+	void humanVSAi(agent* myAgent);
+
 };
 
