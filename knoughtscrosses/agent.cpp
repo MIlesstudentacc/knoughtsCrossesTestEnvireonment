@@ -22,7 +22,9 @@ void agent::takeAction(bool maxOrMin)
 {
 	srand((unsigned)time(NULL));
 
-	int random = rand() % 8;
+	int random = rand() % 10;
+
+	
 	if (random > epsilon)
 	{
 		action = takeGreedy(maxOrMin); 
@@ -38,16 +40,18 @@ void agent::takeAction(bool maxOrMin)
 
 void agent::decayEpsilon()
 {
-	if (episodes >= 195312)//game tree complexity /10
+	if (episodes >= 100)//game tree complexity /10
 	{
 		if (epsilon > 1)
 		{
 			epsilon = epsilon - 1;
+		
+			episodes = 0;
 			
 		}
 	}
-	total_episodes = total_episodes + episodes;
-	episodes = 0;
+	
+	
 	
 
 }
@@ -82,13 +86,27 @@ int agent::takeExplore()
 
 int agent::minGreed()
 {
+	int i = 0;
 	int* legalMoves = currentState->getLegalMoves();
-	int min = legalMoves[0];
-	for (int i = 1; i < currentState->getLegalMoveSize(); i++)
+
+	while (!currentState->checkTransitionExist(legalMoves[i]) && i < currentState->getLegalMoveSize() - 1)
 	{
-		if (legalMoves[i] > min)
+		i++;
+	}
+	if (i == currentState->getLegalMoveSize() - 1)
+	{
+		return takeExplore();
+	}
+	int min = currentState->getTransition(legalMoves[i])->getValue();
+	for (int j = i; j < currentState->getLegalMoveSize(); j++)
+	{
+		int legalMoveValue = currentState->getTransition(legalMoves[j])->getValue();
+		if (currentState->checkTransitionExist(legalMoves[j]))
 		{
-			min = legalMoves[i];
+			if (legalMoveValue < min)
+			{
+				min = legalMoveValue;
+			}
 		}
 	}
 	return min;
@@ -104,6 +122,7 @@ void agent::refreshEpisode()
 void agent::increaseEpisodeCount()
 {
 	this->episodes = episodes++;
+	total_episodes = total_episodes++;
 }
 void agent::monteCarlo()
 {
@@ -159,14 +178,29 @@ int agent::getEpisodeCount()
 {
 	return total_episodes;
 }
-int agent::maxGreed() {
+int agent::maxGreed() 
+{
+	int i = 0;
 	int* legalMoves = currentState->getLegalMoves();
-	int max = legalMoves[0];
-	for (int i = 1; i < currentState->getLegalMoveSize(); i++)
+
+	while (!currentState->checkTransitionExist(legalMoves[i]) && i < currentState->getLegalMoveSize() - 1)
 	{
-		if (legalMoves[i] > max)
+		i++;
+	}
+	if (i == currentState->getLegalMoveSize() - 1)
+	{
+		return takeExplore();
+	}
+	int max = currentState->getTransition(legalMoves[i])->getValue();
+	for (int j = i; j < currentState->getLegalMoveSize(); j++)
+	{
+		if (currentState->checkTransitionExist(legalMoves[j]))
 		{
-			max = legalMoves[i];
+			int legalMoveValue = currentState->getTransition(legalMoves[j])->getValue();
+			if (legalMoveValue > max)
+			{
+				max = legalMoveValue;
+			}
 		}
 	}
 	return max;

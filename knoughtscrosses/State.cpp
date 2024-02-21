@@ -1,5 +1,10 @@
 #include "State.h"
 
+int State::getValue()
+{
+	return value; 
+}
+
 bool State::checkTransitionExist(int transition)
 {
 	if (transitions[transition] != nullptr)
@@ -39,7 +44,7 @@ int State::getLegalMove(int move)
 
 void State::updateValue(int reward, float discount,float learningRate,int episodePos)
 {
-	value = learningRate * (reward * (std::max(pow(discount,episodePos),0.1)) - value);
+	value = value + learningRate * (reward * (std::max(pow(discount,episodePos),0.1)) - value);
 
 }
 

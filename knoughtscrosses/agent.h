@@ -34,8 +34,6 @@ public:
 
 	void decayEpsilon();
 
-	void backpropagate();
-
 	int takeGreedy(bool maxOrMIn);
 
 	int takeExplore(); 

@@ -10,14 +10,11 @@ private:
 	int* legalMoves;
 
 	int legalMoveLength;
-
+	int value = 0;
 	
 public:
 	int id = 0;
-	int value = 0;
-
 	
-
 	int getValue();
 
 	bool checkTransitionExist(int transition);
