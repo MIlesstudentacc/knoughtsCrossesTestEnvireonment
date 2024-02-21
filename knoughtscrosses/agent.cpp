@@ -40,7 +40,7 @@ void agent::takeAction(bool maxOrMin)
 
 void agent::decayEpsilon()
 {
-	if (episodes >= 100)//game tree complexity /10
+	if (episodes >= 1000000/10)//game tree complexity /10
 	{
 		if (epsilon > 1)
 		{
@@ -97,12 +97,12 @@ int agent::minGreed()
 	{
 		return takeExplore();
 	}
-	int min = currentState->getTransition(legalMoves[i])->getValue();
+	double min = currentState->getTransition(legalMoves[i])->getValue();
 	for (int j = i; j < currentState->getLegalMoveSize(); j++)
 	{
-		int legalMoveValue = currentState->getTransition(legalMoves[j])->getValue();
 		if (currentState->checkTransitionExist(legalMoves[j]))
 		{
+			double legalMoveValue = currentState->getTransition(legalMoves[j])->getValue();
 			if (legalMoveValue < min)
 			{
 				min = legalMoveValue;
@@ -178,6 +178,10 @@ int agent::getEpisodeCount()
 {
 	return total_episodes;
 }
+void agent::setAlwaysGreed()
+{
+	int epsilon = 0; 
+}
 int agent::maxGreed() 
 {
 	int i = 0;
@@ -191,12 +195,12 @@ int agent::maxGreed()
 	{
 		return takeExplore();
 	}
-	int max = currentState->getTransition(legalMoves[i])->getValue();
+	double max = currentState->getTransition(legalMoves[i])->getValue();
 	for (int j = i; j < currentState->getLegalMoveSize(); j++)
 	{
 		if (currentState->checkTransitionExist(legalMoves[j]))
 		{
-			int legalMoveValue = currentState->getTransition(legalMoves[j])->getValue();
+			double legalMoveValue = currentState->getTransition(legalMoves[j])->getValue();
 			if (legalMoveValue > max)
 			{
 				max = legalMoveValue;

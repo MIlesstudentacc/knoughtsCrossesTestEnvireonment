@@ -11,7 +11,7 @@ private:
 
 	bool maxOrMin = true; 
 
-	float learningRate = 0.001;
+	double learningRate = 0.001;
 
 
 	State* node = new State();
@@ -62,5 +62,7 @@ public:
 	State* getCurrentState(); 
 
 	int getEpisodeCount();
+
+	void setAlwaysGreed();
 };
 

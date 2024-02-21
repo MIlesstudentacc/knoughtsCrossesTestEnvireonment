@@ -35,13 +35,16 @@ void gameStarter::AISelfPlay(agent* myAgent)
     bool win = false; 
     myAgent->getCurrentState()->updateLegalMoves(myboard);
     myAgent->getCurrentState()->id = 1;
-    int episodes = 1000;
+    int episodes = 1000000;
+    
+   
    
     while (myAgent->getEpisodeCount() < episodes)
     {
         //std::cout << "the current episodes" + myAgent->getEpisodeCount() << std::endl;
-        bool minOrMax = myboard->getCounter();
-        myAgent->takeAction(minOrMax % 2);//if counter 2 false 
+        bool minOrMax = myboard->getCounter()%2;
+    
+        myAgent->takeAction(minOrMax);//if counter 2 false 
         int pos = myAgent->getAction();
         if (myboard->legalMove(pos))
         {
@@ -74,15 +77,16 @@ void gameStarter::AISelfPlay(agent* myAgent)
 
 void gameStarter::humanVSAi(agent* myAgent)
 {
-
+    myAgent->setAlwaysGreed();
     bool win = false;
     myAgent->getCurrentState()->updateLegalMoves(myboard);
     myAgent->getCurrentState()->id = 1;
-    int episodes = 1000;
+    
     int pos = 0;
+    bool AIturn = true;
     while (!win)
     {
-        if (myboard->getCounter() == 1)
+        if (AIturn)
         {
             //std::cout << "the current episodes" + myAgent->getEpisodeCount() << std::endl;
             bool minOrMax = myboard->getCounter();
@@ -91,7 +95,7 @@ void gameStarter::humanVSAi(agent* myAgent)
         }
         else
         {
-
+            myboard->presentBoard();
             std::cout << "what position would you like to place your counter";
             std::cin >> pos;
         }
@@ -99,13 +103,17 @@ void gameStarter::humanVSAi(agent* myAgent)
         if (myboard->legalMove(pos))
         {
             myboard->setCounter(pos);
-            myAgent->afterActionUpdates();
+            if (AIturn)
+            {
+                myAgent->afterActionUpdates();
+                myAgent->getCurrentState()->updateLegalMoves(myboard);
+            }
 
 
             win = myboard->checkallwin(pos);
             if (win)
             {
-                //std::cout << "noice";
+                std::cout << "noice";
                 myboard->startNewGame();
 
             }
@@ -118,7 +126,15 @@ void gameStarter::humanVSAi(agent* myAgent)
             {
                 myboard->switchCounter();
             }
-            myboard->presentBoard();
+            
+            if (AIturn)
+            {
+                AIturn = false;
+            }
+            else
+            {
+                AIturn = true;
+            }
         }
     }
 

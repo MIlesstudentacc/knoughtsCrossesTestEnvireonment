@@ -1,6 +1,6 @@
 #include "State.h"
 
-int State::getValue()
+double State::getValue()
 {
 	return value; 
 }
@@ -44,7 +44,8 @@ int State::getLegalMove(int move)
 
 void State::updateValue(int reward, float discount,float learningRate,int episodePos)
 {
-	value = value + learningRate * (reward * (std::max(pow(discount,episodePos),0.1)) - value);
+	double discountAmount = pow(discount, episodePos);
+	value = value + learningRate * (reward * (std::max(discountAmount,0.1)) - value);
 
 }
 
