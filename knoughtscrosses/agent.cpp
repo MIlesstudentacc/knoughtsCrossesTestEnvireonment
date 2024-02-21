@@ -40,7 +40,7 @@ void agent::takeAction(bool maxOrMin)
 
 void agent::decayEpsilon()
 {
-	if (episodes >= 1000000/10)//game tree complexity /10
+	if (episodes >= 1000/10)//game tree complexity /10
 	{
 		if (epsilon > 1)
 		{
@@ -161,9 +161,12 @@ void agent::agentCleanUp()
 	decayEpsilon(); 
 	monteCarlo(); 
 	refreshEpisode(); 
+	lastState = nullptr;
 	currentState = node; 
 
 }
+
+
 void agent::afterActionUpdates()
 {
 	
@@ -182,6 +185,7 @@ void agent::setAlwaysGreed()
 {
 	int epsilon = 0; 
 }
+
 int agent::maxGreed() 
 {
 	int i = 0;
@@ -208,4 +212,11 @@ int agent::maxGreed()
 		}
 	}
 	return max;
+}
+
+void agent::setToOriginState()
+{
+	currentState = node;
+	lastState = nullptr; 
+
 }

@@ -64,5 +64,7 @@ public:
 	int getEpisodeCount();
 
 	void setAlwaysGreed();
+
+	void setToOriginState(); 
 };
 

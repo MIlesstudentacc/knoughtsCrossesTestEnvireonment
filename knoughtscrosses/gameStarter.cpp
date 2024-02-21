@@ -35,7 +35,7 @@ void gameStarter::AISelfPlay(agent* myAgent)
     bool win = false; 
     myAgent->getCurrentState()->updateLegalMoves(myboard);
     myAgent->getCurrentState()->id = 1;
-    int episodes = 1000000;
+    int episodes = 1000;
     
    
    
@@ -84,56 +84,61 @@ void gameStarter::humanVSAi(agent* myAgent)
     
     int pos = 0;
     bool AIturn = true;
-    while (!win)
+    for (int i = 0; i < 500; i++)
     {
-        if (AIturn)
+      
+        while (!win)
         {
-            //std::cout << "the current episodes" + myAgent->getEpisodeCount() << std::endl;
-            bool minOrMax = myboard->getCounter();
-            myAgent->takeAction(minOrMax % 2);//if counter 2 false 
-            pos = myAgent->getAction();
-        }
-        else
-        {
-            myboard->presentBoard();
-            std::cout << "what position would you like to place your counter";
-            std::cin >> pos;
-        }
-
-        if (myboard->legalMove(pos))
-        {
-            myboard->setCounter(pos);
             if (AIturn)
             {
-                myAgent->afterActionUpdates();
-                myAgent->getCurrentState()->updateLegalMoves(myboard);
-            }
-
-
-            win = myboard->checkallwin(pos);
-            if (win)
-            {
-                std::cout << "noice";
-                myboard->startNewGame();
-
-            }
-            else if (myboard->checkDraw())
-            {
-                myboard->startNewGame();
-
+                //std::cout << "the current episodes" + myAgent->getEpisodeCount() << std::endl;
+                bool minOrMax = myboard->getCounter();
+                myAgent->takeAction(minOrMax % 2);//if counter 2 false 
+                pos = myAgent->getAction();
             }
             else
             {
-                myboard->switchCounter();
+                myboard->presentBoard();
+                std::cout << "what position would you like to place your counter";
+                std::cin >> pos;
             }
-            
-            if (AIturn)
+
+            if (myboard->legalMove(pos))
             {
-                AIturn = false;
-            }
-            else
-            {
-                AIturn = true;
+                myboard->setCounter(pos);
+                if (AIturn)
+                {
+                    myAgent->afterActionUpdates();
+                    myAgent->getCurrentState()->updateLegalMoves(myboard);
+                }
+
+
+                win = myboard->checkallwin(pos);
+                if (win)
+                {
+                    std::cout << "noice";
+                    win = false; 
+                    myboard->startNewGame();
+
+                }
+                else if (myboard->checkDraw())
+                {
+                    myboard->startNewGame();
+
+                }
+                else
+                {
+                    myboard->switchCounter();
+                }
+
+                if (AIturn)
+                {
+                    AIturn = false;
+                }
+                else
+                {
+                    AIturn = true;
+                }
             }
         }
     }
