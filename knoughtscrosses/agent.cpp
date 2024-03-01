@@ -8,8 +8,10 @@ void agent::updateStateTree(int action)
 	if (!lastState->checkTransitionExist(action))
 	{
 		State* newState = new State();
-		
+		latest_id++;
+		newState->id = latest_id;
 		lastState->updateTransitions(action, newState);
+		
 		
 	}
 	currentState = lastState->getTransition(action);
@@ -20,7 +22,7 @@ void agent::updateStateTree(int action)
 
 void agent::takeAction(bool maxOrMin)
 {
-	srand((unsigned)time(NULL));
+	
 
 	int random = rand() % 10;
 
@@ -40,7 +42,7 @@ void agent::takeAction(bool maxOrMin)
 
 void agent::decayEpsilon()
 {
-	if (episodes >= 1000/10)//game tree complexity /10
+	if (episodes >= 100000/10)//game tree complexity /10
 	{
 		if (epsilon > 1)
 		{
@@ -76,7 +78,7 @@ int agent::takeGreedy(bool maxOrMin)
 
 int agent::takeExplore()
 {
-	srand((unsigned)time(NULL));
+	
 	int legalMoveSize = currentState->getLegalMoveSize();
 	int random = rand() % legalMoveSize;
 	int move = currentState->getLegalMove(random);
@@ -88,16 +90,14 @@ int agent::minGreed()
 {
 	int i = 0;
 	int* legalMoves = currentState->getLegalMoves();
-
-	while (!currentState->checkTransitionExist(legalMoves[i]) && i < currentState->getLegalMoveSize() - 1)
+	int minAction;
+	if (!currentState->checkTransitionExist(legalMoves[i]))
 	{
-		i++;
-	}
-	if (i == currentState->getLegalMoveSize() - 1)
-	{
-		return takeExplore();
+		minAction = legalMoves[i];
+		return minAction;
 	}
 	double min = currentState->getTransition(legalMoves[i])->getValue();
+	minAction = legalMoves[i];
 	for (int j = i; j < currentState->getLegalMoveSize(); j++)
 	{
 		if (currentState->checkTransitionExist(legalMoves[j]))
@@ -106,10 +106,16 @@ int agent::minGreed()
 			if (legalMoveValue < min)
 			{
 				min = legalMoveValue;
+				minAction = legalMoves[j];
 			}
 		}
+		else
+		{
+			minAction = legalMoves[j];
+			return minAction;
+		}
 	}
-	return min;
+	return minAction;
 }
 void agent::addToEpisode()
 {
@@ -129,20 +135,29 @@ void agent::monteCarlo()
 	int start = episode.size();
 	int iterator = start-1;
 	int count = 0;
-	
-	while (iterator > 0)
+	int reward = 0; 
+	int reward2 = 0;
+	if (iterator % 2 == 1)
 	{
-		
-		episode.at(iterator)->updateValue(1,discount,learningRate,count);
-		iterator = iterator - 2;
-		count++;
+		reward = -1;
+		reward2 = 1;
 	}
-	iterator = start - 1;
-	while (iterator > 0)
+	else
 	{
-		count++;
-		episode.at(iterator)->updateValue(-1, discount, learningRate, count);
-		iterator = iterator - 2;
+		reward = 1;
+		reward2 = -1;
+	}
+	for (int i = 0; i < 2; i++)
+	{
+		while (iterator >= 0)
+		{
+
+			episode.at(iterator)->updateValue(reward, discount, learningRate, count);
+			iterator = iterator - 2;
+			count++;
+		}
+		reward = reward2;
+		iterator = start - 1;
 	}
 
 	
@@ -159,7 +174,6 @@ void agent::agentCleanUp()
 {
 	increaseEpisodeCount();
 	decayEpsilon(); 
-	monteCarlo(); 
 	refreshEpisode(); 
 	lastState = nullptr;
 	currentState = node; 
@@ -183,23 +197,28 @@ int agent::getEpisodeCount()
 }
 void agent::setAlwaysGreed()
 {
-	int epsilon = 0; 
+	epsilon = -1; 
 }
 
 int agent::maxGreed() 
 {
 	int i = 0;
 	int* legalMoves = currentState->getLegalMoves();
-
-	while (!currentState->checkTransitionExist(legalMoves[i]) && i < currentState->getLegalMoveSize() - 1)
+	/*std::cout << "ID" << std::endl;
+	std::cout << currentState->id << std::endl;
+	std::cout << "legal moves" << std::endl;
+	for (int k = 0; k < currentState->getLegalMoveSize(); k++)
 	{
-		i++;
-	}
-	if (i == currentState->getLegalMoveSize() - 1)
+		std::cout << legalMoves[k] << std::endl;
+	}*/
+	int maxAction;
+	if (!currentState->checkTransitionExist(legalMoves[i]))
 	{
-		return takeExplore();
+		maxAction = legalMoves[i];
+		return maxAction;
 	}
 	double max = currentState->getTransition(legalMoves[i])->getValue();
+	maxAction = legalMoves[i];
 	for (int j = i; j < currentState->getLegalMoveSize(); j++)
 	{
 		if (currentState->checkTransitionExist(legalMoves[j]))
@@ -208,10 +227,16 @@ int agent::maxGreed()
 			if (legalMoveValue > max)
 			{
 				max = legalMoveValue;
+				maxAction = maxAction = legalMoves[j];
 			}
 		}
+		else
+		{
+			maxAction = maxAction = legalMoves[j];
+			return maxAction;
+		}
 	}
-	return max;
+	return maxAction;
 }
 
 void agent::setToOriginState()
@@ -219,4 +244,14 @@ void agent::setToOriginState()
 	currentState = node;
 	lastState = nullptr; 
 
+}
+
+void agent::alwaysExplore()
+{
+	epsilon = 10;
+}
+
+int agent::gettotal_states()
+{
+	return latest_id;
 }

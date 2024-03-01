@@ -44,8 +44,11 @@ int State::getLegalMove(int move)
 
 void State::updateValue(int reward, float discount,float learningRate,int episodePos)
 {
+	id = id;
+
 	double discountAmount = pow(discount, episodePos);
-	value = value + learningRate * (reward * (std::max(discountAmount,0.1)) - value);
+	double calcChange = learningRate * (reward * (std::max(discountAmount, 0.1)) - value);
+	value = value + calcChange;
 
 }
 

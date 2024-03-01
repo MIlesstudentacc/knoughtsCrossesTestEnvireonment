@@ -35,11 +35,11 @@ void gameStarter::AISelfPlay(agent* myAgent)
     bool win = false; 
     myAgent->getCurrentState()->updateLegalMoves(myboard);
     myAgent->getCurrentState()->id = 1;
-    int episodes = 1000;
+    int episodes = 100000;
     
    
    
-    while (myAgent->getEpisodeCount() < episodes)
+    while (myAgent->gettotal_states() < 19683)
     {
         //std::cout << "the current episodes" + myAgent->getEpisodeCount() << std::endl;
         bool minOrMax = myboard->getCounter()%2;
@@ -57,7 +57,9 @@ void gameStarter::AISelfPlay(agent* myAgent)
             {
                 //std::cout << "noice";
                 myboard->startNewGame();
+                myAgent->monteCarlo();
                 myAgent->agentCleanUp();
+                
             }
             else if (myboard->checkDraw())
             {
@@ -70,6 +72,10 @@ void gameStarter::AISelfPlay(agent* myAgent)
             }
             //myboard->presentBoard();
         }
+        else
+        {
+            myboard->presentBoard();
+        }
     }
     std::cout << "finished" << std::endl;
 
@@ -77,7 +83,10 @@ void gameStarter::AISelfPlay(agent* myAgent)
 
 void gameStarter::humanVSAi(agent* myAgent)
 {
+    myboard->startNewGame();
+    myAgent->agentCleanUp();
     myAgent->setAlwaysGreed();
+    //myAgent->alwaysExplore();
     bool win = false;
     myAgent->getCurrentState()->updateLegalMoves(myboard);
     myAgent->getCurrentState()->id = 1;
@@ -98,7 +107,7 @@ void gameStarter::humanVSAi(agent* myAgent)
             }
             else
             {
-                myboard->presentBoard();
+               
                 std::cout << "what position would you like to place your counter";
                 std::cin >> pos;
             }
@@ -106,23 +115,25 @@ void gameStarter::humanVSAi(agent* myAgent)
             if (myboard->legalMove(pos))
             {
                 myboard->setCounter(pos);
-                if (AIturn)
-                {
-                    myAgent->afterActionUpdates();
-                    myAgent->getCurrentState()->updateLegalMoves(myboard);
-                }
-
+                
+                myAgent->afterActionUpdates();
+                myAgent->getCurrentState()->updateLegalMoves(myboard);
+                std::cout << "----------------------------------------" << std::endl;
+                myboard->presentBoard();
+                std::cout << "----------------------------------------" << std::endl;
 
                 win = myboard->checkallwin(pos);
                 if (win)
                 {
                     std::cout << "noice";
                     win = false; 
+                    myAgent->agentCleanUp();
                     myboard->startNewGame();
 
                 }
                 else if (myboard->checkDraw())
                 {
+                    myAgent->agentCleanUp();
                     myboard->startNewGame();
 
                 }

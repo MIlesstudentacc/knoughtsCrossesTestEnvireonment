@@ -6,6 +6,7 @@
 #include "gameStarter.h"
 int main()
 {
+    srand((unsigned)time(NULL));
     agent* thisAgent = new agent(); 
     gameStarter* myStarter = new gameStarter(); 
     myStarter->AISelfPlay(thisAgent);

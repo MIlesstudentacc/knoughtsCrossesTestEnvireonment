@@ -27,6 +27,8 @@ private:
 	float discount = 0.5;
 
 	int total_episodes = 0;
+
+	int latest_id = 1;
 public:
 	void updateStateTree(int action);
 
@@ -66,5 +68,9 @@ public:
 	void setAlwaysGreed();
 
 	void setToOriginState(); 
+
+	void alwaysExplore();
+
+	int gettotal_states();
 };
 
