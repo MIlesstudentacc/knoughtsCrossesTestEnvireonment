@@ -33,7 +33,12 @@ private:
 	int total_episodes = 0;
 
 	int latest_id = 1;
+
+	int target_Episodes = 100000000;
 public:
+
+	int returntargetEpisodes(); 
+
 	void updateStateTree(int action, State* newState);
 
 	void takeAction(bool maxOrMin);
@@ -63,7 +68,7 @@ public:
 
 	void agentCleanUp();
 
-	void afterActionUpdates(long last_boardState, int action,int counter);
+	void afterActionUpdates(long last_boardState, int action,int counter,board* myBoard);
 
 	State* getCurrentState(); 
 
@@ -78,7 +83,7 @@ public:
 	int gettotal_states();
 
 
-	State* addToMap(long new_boardState);
+	State* addToMap(long new_boardState,board* myBoard);
 
 	State* checkExist(long new_boardState);
 

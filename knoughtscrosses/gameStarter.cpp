@@ -35,11 +35,10 @@ void gameStarter::AISelfPlay(agent* myAgent)
     bool win = false; 
     myAgent->getCurrentState()->updateLegalMoves(myboard);
     myAgent->getCurrentState()->id = 1;
-    int episodes = 10000000;
     
    
    
-    while (myAgent->getEpisodeCount() < episodes)
+    while (myAgent->getEpisodeCount() < myAgent->returntargetEpisodes())
     {
 
         //std::cout << "the current episodes" + myAgent->getEpisodeCount() << std::endl;
@@ -52,8 +51,8 @@ void gameStarter::AISelfPlay(agent* myAgent)
         if (myboard->legalMove(pos))
         {
             myboard->setCounter(pos);
-            myAgent->afterActionUpdates(current_state->getBoardStateRepresentation(), pos,myboard->getCounter());
-            myAgent->getCurrentState()->updateLegalMoves(myboard); 
+            myAgent->afterActionUpdates(current_state->getBoardStateRepresentation(), pos,myboard->getCounter(),myboard);
+            
 
             win = myboard->checkallwin(pos);
             if (win)
@@ -98,6 +97,7 @@ void gameStarter::humanVSAi(agent* myAgent)
     bool AIturn = true;
     for (int i = 0; i < 500; i++)
     {
+        
       
         while (!win)
         {
@@ -121,8 +121,8 @@ void gameStarter::humanVSAi(agent* myAgent)
             {
                 myboard->setCounter(pos);
                 
-                myAgent->afterActionUpdates(current_state->getBoardStateRepresentation(), pos, myboard->getCounter());
-                myAgent->getCurrentState()->updateLegalMoves(myboard);
+                myAgent->afterActionUpdates(current_state->getBoardStateRepresentation(), pos, myboard->getCounter(),myboard);
+                
                 std::cout << "----------------------------------------" << std::endl;
                 myboard->presentBoard();
                 std::cout << "----------------------------------------" << std::endl;
@@ -130,16 +130,19 @@ void gameStarter::humanVSAi(agent* myAgent)
                 win = myboard->checkallwin(pos);
                 if (win)
                 {
-                    std::cout << "noice";
+                    std::cout << "win";
                     win = false; 
                     myAgent->agentCleanUp();
                     myboard->startNewGame();
+                    AIturn = false;
 
                 }
                 else if (myboard->checkDraw())
                 {
+                    std::cout << "draw";
                     myAgent->agentCleanUp();
                     myboard->startNewGame();
+                    AIturn = false;
 
                 }
                 else

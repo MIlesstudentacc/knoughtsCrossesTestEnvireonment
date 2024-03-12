@@ -3,6 +3,11 @@
 #include <iostream>
 #include <bitset>
 
+int agent::returntargetEpisodes()
+{
+	return target_Episodes;
+}
+
 void agent::updateStateTree(int action, State* newState)
 {
 	lastState->updateTransitions(action, newState);
@@ -27,7 +32,7 @@ void agent::takeAction(bool maxOrMin)
 
 void agent::decayEpsilon()
 {
-	if (episodes >= 100000/10)//game tree complexity /10
+	if (episodes >= target_Episodes/10)//game tree complexity /10
 	{
 		if (epsilon > 1)
 		{
@@ -166,11 +171,11 @@ void agent::agentCleanUp()
 }
 
 
-void agent::afterActionUpdates(long last_boardState, int action,int counter)
+void agent::afterActionUpdates(long last_boardState, int action,int counter,board* myBoard)
 {
 	lastState = currentState;
 	long new_boardState = calcNewBoardState(last_boardState, action,counter);
-	State* toAdd = addToMap(new_boardState);
+	State* toAdd = addToMap(new_boardState, myBoard);
 	updateStateTree(action, toAdd);
 	addToEpisode();
 }
@@ -243,7 +248,7 @@ int agent::gettotal_states()
 	return latest_id;
 }
 
-State* agent::addToMap(long new_boardState)
+State* agent::addToMap(long new_boardState,board* myBoard)
 {
 	State* Toadd = checkExist(new_boardState);
 	if (Toadd == nullptr)
@@ -253,6 +258,7 @@ State* agent::addToMap(long new_boardState)
 		Toadd->updateBoardState(new_boardState);//not running for anything other than node
 		stateSpace[new_boardState] = Toadd;
 		latest_id++;
+		Toadd->updateLegalMoves(myBoard);
 		//std::cout << "new state" + latest_id << std::endl;
 
 	}

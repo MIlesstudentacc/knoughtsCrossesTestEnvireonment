@@ -12,7 +12,7 @@ bool board::checkWin(int place,int decreaser)
 	
 	for (int i = lowestplace; i < (lowestplace+bound)+1; i = i + decreaser)
 	{
-		if (boardArr[i] != counter)
+		if (boardArr[i] != counter || i > 9)
 		{
 			return false;
 		}
@@ -55,6 +55,10 @@ bool board::checkallwin(int place)
 	if (checkWin(place, 4))
 	{
 		key = true;
+	}
+	if (boardArr[2] == counter && boardArr[4] == counter && boardArr[6] == counter)
+	{
+		key = true; 
 	}
 	if (key)
 	{

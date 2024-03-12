@@ -81,7 +81,7 @@ void State::updateLegalMoves(board* myboard)
 			tempStorage.push_back(i);
 		}
 	}
-	free(legalMoves);
+	//free(legalMoves);
 	legalMoves = new int[i];
 	for (int j = 0; j < tempStorage.size(); j++)
 	{
