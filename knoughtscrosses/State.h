@@ -2,6 +2,7 @@
 #include <vector>
 #include "board.h"
 #include <iostream>
+#include <bitset>
 class State
 {
 private:
@@ -11,6 +12,8 @@ private:
 
 	int legalMoveLength;
 	double value = 0;
+
+	long boardState = 0;
 	
 public:
 	int id = 0;
@@ -32,6 +35,12 @@ public:
 	void updateValue(int reward,float discount,float learningRate,int episodePos);
 
 	State* getTransition(int action);
-	
+
+
+
+	void updateBoardState(long new_boardState);
+
+	long getBoardStateRepresentation();
+
 };
 

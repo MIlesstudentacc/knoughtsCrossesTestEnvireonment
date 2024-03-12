@@ -1,5 +1,6 @@
 #pragma once
 #include "State.h"
+#include <map>
 class agent
 
 {
@@ -12,6 +13,9 @@ private:
 	bool maxOrMin = true; 
 
 	double learningRate = 0.001;
+
+
+	std::map<long, State*> stateSpace;
 
 
 	State* node = new State();
@@ -30,7 +34,7 @@ private:
 
 	int latest_id = 1;
 public:
-	void updateStateTree(int action);
+	void updateStateTree(int action, State* newState);
 
 	void takeAction(bool maxOrMin);
 
@@ -59,7 +63,7 @@ public:
 
 	void agentCleanUp();
 
-	void afterActionUpdates(); 
+	void afterActionUpdates(long last_boardState, int action,int counter);
 
 	State* getCurrentState(); 
 
@@ -72,5 +76,12 @@ public:
 	void alwaysExplore();
 
 	int gettotal_states();
+
+
+	State* addToMap(long new_boardState);
+
+	State* checkExist(long new_boardState);
+
+	long calcNewBoardState(long old_boardState, int action,int counter);
 };
 

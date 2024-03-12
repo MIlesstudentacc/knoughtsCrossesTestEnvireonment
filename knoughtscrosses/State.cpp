@@ -57,6 +57,19 @@ State* State::getTransition(int action)
 	return transitions[action];
 }
 
+void State::updateBoardState(long new_boardState)
+{
+	boardState = new_boardState;
+}
+
+
+
+long State::getBoardStateRepresentation()
+{
+	return boardState;
+}
+
+
 void State::updateLegalMoves(board* myboard)
 {
 	int i = 0;
@@ -68,6 +81,7 @@ void State::updateLegalMoves(board* myboard)
 			tempStorage.push_back(i);
 		}
 	}
+	free(legalMoves);
 	legalMoves = new int[i];
 	for (int j = 0; j < tempStorage.size(); j++)
 	{

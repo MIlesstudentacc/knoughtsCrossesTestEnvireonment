@@ -35,13 +35,16 @@ void gameStarter::AISelfPlay(agent* myAgent)
     bool win = false; 
     myAgent->getCurrentState()->updateLegalMoves(myboard);
     myAgent->getCurrentState()->id = 1;
-    int episodes = 100000;
+    int episodes = 10000000;
     
    
    
-    while (myAgent->gettotal_states() < 19683)
+    while (myAgent->getEpisodeCount() < episodes)
     {
+
         //std::cout << "the current episodes" + myAgent->getEpisodeCount() << std::endl;
+        State* current_state = myAgent->getCurrentState();
+        int current_total = myAgent->gettotal_states();
         bool minOrMax = myboard->getCounter()%2;
     
         myAgent->takeAction(minOrMax);//if counter 2 false 
@@ -49,7 +52,7 @@ void gameStarter::AISelfPlay(agent* myAgent)
         if (myboard->legalMove(pos))
         {
             myboard->setCounter(pos);
-            myAgent->afterActionUpdates();
+            myAgent->afterActionUpdates(current_state->getBoardStateRepresentation(), pos,myboard->getCounter());
             myAgent->getCurrentState()->updateLegalMoves(myboard); 
 
             win = myboard->checkallwin(pos);
@@ -98,9 +101,11 @@ void gameStarter::humanVSAi(agent* myAgent)
       
         while (!win)
         {
+            State* current_state = myAgent->getCurrentState();
             if (AIturn)
             {
                 //std::cout << "the current episodes" + myAgent->getEpisodeCount() << std::endl;
+            
                 bool minOrMax = myboard->getCounter();
                 myAgent->takeAction(minOrMax % 2);//if counter 2 false 
                 pos = myAgent->getAction();
@@ -116,7 +121,7 @@ void gameStarter::humanVSAi(agent* myAgent)
             {
                 myboard->setCounter(pos);
                 
-                myAgent->afterActionUpdates();
+                myAgent->afterActionUpdates(current_state->getBoardStateRepresentation(), pos, myboard->getCounter());
                 myAgent->getCurrentState()->updateLegalMoves(myboard);
                 std::cout << "----------------------------------------" << std::endl;
                 myboard->presentBoard();

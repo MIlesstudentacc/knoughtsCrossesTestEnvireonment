@@ -1,32 +1,17 @@
 #include "agent.h"
 #include <ctime>
 #include <iostream>
+#include <bitset>
 
-void agent::updateStateTree(int action)
+void agent::updateStateTree(int action, State* newState)
 {
-	lastState = currentState;
-	if (!lastState->checkTransitionExist(action))
-	{
-		State* newState = new State();
-		latest_id++;
-		newState->id = latest_id;
-		lastState->updateTransitions(action, newState);
-		
-		
-	}
-	currentState = lastState->getTransition(action);
+	lastState->updateTransitions(action, newState);
 }
-
-
-
 
 void agent::takeAction(bool maxOrMin)
 {
-	
-
 	int random = rand() % 10;
 
-	
 	if (random > epsilon)
 	{
 		action = takeGreedy(maxOrMin); 
@@ -181,11 +166,13 @@ void agent::agentCleanUp()
 }
 
 
-void agent::afterActionUpdates()
+void agent::afterActionUpdates(long last_boardState, int action,int counter)
 {
-	
-	updateStateTree(action);
-	addToEpisode(); 
+	lastState = currentState;
+	long new_boardState = calcNewBoardState(last_boardState, action,counter);
+	State* toAdd = addToMap(new_boardState);
+	updateStateTree(action, toAdd);
+	addToEpisode();
 }
 State* agent::getCurrentState()
 {
@@ -255,3 +242,49 @@ int agent::gettotal_states()
 {
 	return latest_id;
 }
+
+State* agent::addToMap(long new_boardState)
+{
+	State* Toadd = checkExist(new_boardState);
+	if (Toadd == nullptr)
+	{
+		int size = stateSpace.size(); 
+		Toadd = new State();
+		Toadd->updateBoardState(new_boardState);//not running for anything other than node
+		stateSpace[new_boardState] = Toadd;
+		latest_id++;
+		//std::cout << "new state" + latest_id << std::endl;
+
+	}
+	else
+	{
+		latest_id = latest_id;
+		
+	}
+	currentState = Toadd;
+	return Toadd;
+
+}
+
+State* agent::checkExist(long new_boardState)
+{
+	if (stateSpace.find(new_boardState) != stateSpace.end())
+	{
+		State* foundState = stateSpace[new_boardState];
+		return foundState;
+
+	}
+	else
+	{
+		return nullptr;
+	}
+
+}
+long agent::calcNewBoardState(long old_boardState, int action,int counter)
+{
+	int actionAddOn = pow(3, action);
+	actionAddOn = actionAddOn * counter; 
+	return old_boardState + actionAddOn;
+}
+
+
