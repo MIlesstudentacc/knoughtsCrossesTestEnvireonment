@@ -127,28 +127,29 @@ void agent::monteCarlo()
 	int count = 0;
 	int reward = 0; 
 	int reward2 = 0;
-	if (iterator % 2 == 1)
+	if (iterator % 2 == 0)
 	{
-		reward = -1;
-		reward2 = 1;
+		reward = 1;
+		
 	}
 	else
 	{
-		reward = 1;
-		reward2 = -1;
+		reward = -1;
+		
 	}
-	for (int i = 0; i < 2; i++)
+
+	while (iterator >= 0)
 	{
-		while (iterator >= 0)
-		{
 
 			episode.at(iterator)->updateValue(reward, discount, learningRate, count);
-			iterator = iterator - 2;
-			count++;
-		}
-		reward = reward2;
-		iterator = start - 1;
+			iterator = iterator--;
+			if (iterator % 2 == 0)
+			{
+				count++;
+			}
 	}
+	
+	
 
 	
 }

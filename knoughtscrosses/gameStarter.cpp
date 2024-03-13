@@ -130,7 +130,14 @@ void gameStarter::humanVSAi(agent* myAgent)
                 win = myboard->checkallwin(pos);
                 if (win)
                 {
-                    std::cout << "win";
+                    if (AIturn == true)
+                    {
+                        std::cout << " AI wins";
+                    }
+                    else
+                    {
+                        std::cout << " Human wins";
+                    }
                     win = false; 
                     myAgent->agentCleanUp();
                     myboard->startNewGame();

@@ -1,24 +1,7 @@
 #include "board.h"
 #include <iostream>
 
-bool board::checkWin(int place,int decreaser)
-{
-	int lowestplace = place;
-	int bound = decreaser * 2;
-	while (lowestplace - decreaser >= 0)
-	{
-		lowestplace = lowestplace - decreaser;
-	}
-	
-	for (int i = lowestplace; i < (lowestplace+bound)+1; i = i + decreaser)
-	{
-		if (boardArr[i] != counter || i > 9)
-		{
-			return false;
-		}
-	}
-	return true;
-}
+
 
 void board::switchCounter()
 {
@@ -43,23 +26,44 @@ bool board::checkallwin(int place)
 {
 	bool key = false;
 	
-	if (checkWin(place, 1))
-	{
-		key=true;
-	}
-	if (checkWin(place, 3))
-	{
-		key = true;
-	}
-
-	if (checkWin(place, 4))
-	{
-		key = true;
-	}
+   //diag
 	if (boardArr[2] == counter && boardArr[4] == counter && boardArr[6] == counter)
 	{
 		key = true; 
 	}
+	if (boardArr[0] == counter && boardArr[4] == counter && boardArr[8] == counter)
+	{
+		key = true;
+	}
+	//horizontol
+	if (boardArr[0] == counter && boardArr[1] == counter && boardArr[2] == counter)
+	{
+		key = true;
+	}
+	if (boardArr[3] == counter && boardArr[4] == counter && boardArr[5] == counter)
+	{
+		key = true;
+	}
+	if (boardArr[6] == counter && boardArr[7] == counter && boardArr[8] == counter)
+	{
+		key = true;
+	}
+	
+
+	//vertical
+	if (boardArr[0] == counter && boardArr[3] == counter && boardArr[6] == counter)
+	{
+		key = true;
+	}
+	if (boardArr[1] == counter && boardArr[4] == counter && boardArr[7] == counter)
+	{
+		key = true;
+	}
+	if (boardArr[2] == counter && boardArr[5] == counter && boardArr[8] == counter)
+	{
+		key = true;
+	}
+
 	if (key)
 	{
 		return true;

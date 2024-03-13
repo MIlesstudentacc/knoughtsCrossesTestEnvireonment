@@ -10,7 +10,7 @@ public:
 	
 	int getBoardSize();
 
-	bool checkWin(int place,int decreaser);
+
 
 	void switchCounter();
 

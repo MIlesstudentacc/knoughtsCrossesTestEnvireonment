@@ -34,7 +34,7 @@ private:
 
 	int latest_id = 1;
 
-	int target_Episodes = 100000000;
+	int target_Episodes = 1000000;
 public:
 
 	int returntargetEpisodes(); 
