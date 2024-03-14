@@ -7,7 +7,7 @@
 int main()
 {
     srand((unsigned)time(NULL));
-    agent* thisAgent = new agent(); 
+    agent* thisAgent = new agent(true); 
     gameStarter* myStarter = new gameStarter(); 
     myStarter->AISelfPlay(thisAgent);
     myStarter->humanVSAi(thisAgent);

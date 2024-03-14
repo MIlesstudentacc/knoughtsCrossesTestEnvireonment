@@ -59,7 +59,22 @@ void gameStarter::AISelfPlay(agent* myAgent)
             {
                 //std::cout << "noice";
                 myboard->startNewGame();
-                myAgent->monteCarlo();
+                if (myAgent->getBackPropType())
+                {
+                    myAgent->monteCarlo();
+                }
+                else
+                {
+                    if (minOrMax)
+                    {
+                        myAgent->TDCalc(-1);
+                    }
+                    else
+                    {
+                        myAgent->TDCalc(1);
+                    }
+               
+                }
                 myAgent->agentCleanUp();
                 
             }

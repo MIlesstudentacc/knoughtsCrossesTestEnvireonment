@@ -3,6 +3,14 @@
 #include <iostream>
 #include <bitset>
 
+
+
+
+agent::agent(bool TDOrCarlo)
+{
+	this->TDOrCarlo = TDOrCarlo;
+}
+
 int agent::returntargetEpisodes()
 {
 	return target_Episodes;
@@ -177,6 +185,10 @@ void agent::afterActionUpdates(long last_boardState, int action,int counter,boar
 	lastState = currentState;
 	long new_boardState = calcNewBoardState(last_boardState, action,counter);
 	State* toAdd = addToMap(new_boardState, myBoard);
+	if (getBackPropType())
+	{
+		TDCalc(currentState->getValue());
+	}
 	updateStateTree(action, toAdd);
 	addToEpisode();
 }
@@ -292,6 +304,18 @@ long agent::calcNewBoardState(long old_boardState, int action,int counter)
 	int actionAddOn = pow(3, action);
 	actionAddOn = actionAddOn * counter; 
 	return old_boardState + actionAddOn;
+}
+
+void agent::TDCalc(double reward)
+{
+	
+	lastState->updateValue(reward, discount, learningRate,2);
+
+}
+
+bool agent::getBackPropType()
+{
+	return TDOrCarlo;
 }
 
 

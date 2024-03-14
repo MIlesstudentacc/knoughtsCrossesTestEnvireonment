@@ -5,6 +5,9 @@ class agent
 
 {
 private:
+
+	bool TDOrCarlo;
+
 	int episodes = 0; 
 
 	std::vector<State*> episode; 
@@ -22,7 +25,7 @@ private:
 
 	int epsilon = 9;
 
-	State* lastState;
+	State* lastState = nullptr;
 
 	State* currentState = node; 
 
@@ -36,6 +39,8 @@ private:
 
 	int target_Episodes = 1000000;
 public:
+
+	agent(bool TDOrCarlo); 
 
 	int returntargetEpisodes(); 
 
@@ -88,5 +93,9 @@ public:
 	State* checkExist(long new_boardState);
 
 	long calcNewBoardState(long old_boardState, int action,int counter);
+
+	void TDCalc(double reward);
+
+	bool getBackPropType();
 };
 
