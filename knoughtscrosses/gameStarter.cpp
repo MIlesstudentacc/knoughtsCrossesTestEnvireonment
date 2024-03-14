@@ -32,69 +32,75 @@ void gameStarter::humanVsHuman()
 
 void gameStarter::AISelfPlay(agent* myAgent)
 {
-    bool win = false; 
+    srand((unsigned)time(NULL));
     myAgent->getCurrentState()->updateLegalMoves(myboard);
     myAgent->getCurrentState()->id = 1;
     
-   
+    myAgent->alwaysExplore();
    
     while (myAgent->getEpisodeCount() < myAgent->returntargetEpisodes())
     {
-
-        //std::cout << "the current episodes" + myAgent->getEpisodeCount() << std::endl;
-        State* current_state = myAgent->getCurrentState();
-        int current_total = myAgent->gettotal_states();
-        bool minOrMax = myboard->getCounter()%2;
-    
-        myAgent->takeAction(minOrMax);//if counter 2 false 
-        int pos = myAgent->getAction();
-        if (myboard->legalMove(pos))
+        bool win = false;
+        bool draw = false;
+        while (!win && !draw)
         {
-            myboard->setCounter(pos);
-            myAgent->afterActionUpdates(current_state->getBoardStateRepresentation(), pos,myboard->getCounter(),myboard);
-            
+            //std::cout << "the current episodes" + myAgent->getEpisodeCount() << std::endl;
+            State* current_state = myAgent->getCurrentState();
+            int current_total = myAgent->gettotal_states();
+            bool minOrMax = myboard->getCounter() % 2;
 
-            win = myboard->checkallwin(pos);
-            if (win)
+            myAgent->takeAction(minOrMax);//if counter 2 false 
+            int pos = myAgent->getAction();
+            if (myboard->legalMove(pos))
             {
-                //std::cout << "noice";
-                myboard->startNewGame();
-                if (myAgent->getBackPropType())
+                myboard->setCounter(pos);
+                myAgent->afterActionUpdates(current_state->getBoardStateRepresentation(), pos, myboard->getCounter(), myboard);
+
+
+                win = myboard->checkallwin(pos);
+                if (win)
                 {
-                    myAgent->monteCarlo();
-                }
-                else
-                {
-                    if (minOrMax)
+                    //std::cout << "noice";
+                    myboard->startNewGame();
+                    if (myAgent->getBackPropType())
                     {
-                        myAgent->TDCalc(-1);
+                        myAgent->monteCarlo();
                     }
                     else
                     {
-                        myAgent->TDCalc(1);
+                        if (minOrMax)
+                        {
+                            myAgent->TDCalc(-1);
+                        }
+                        else
+                        {
+                            myAgent->TDCalc(1);
+                        }
+
                     }
-               
+                    myAgent->agentCleanUp();
+                    win = true;
+
                 }
-                myAgent->agentCleanUp();
-                
-            }
-            else if (myboard->checkDraw())
-            {
-                myboard->startNewGame();
-                myAgent->agentCleanUp();
+                else if (myboard->checkDraw())
+                {
+                    myboard->startNewGame();
+                    myAgent->agentCleanUp();
+                    draw = true;
+                }
+                else
+                {
+                    myboard->switchCounter();
+                }
+                //myboard->presentBoard();
             }
             else
             {
-                myboard->switchCounter();
+                myboard->presentBoard();
             }
-            //myboard->presentBoard();
-        }
-        else
-        {
-            myboard->presentBoard();
         }
     }
-    std::cout << "finished" << std::endl;
+   
 
 }
 
@@ -104,7 +110,7 @@ void gameStarter::humanVSAi(agent* myAgent)
     myAgent->agentCleanUp();
     myAgent->setAlwaysGreed();
     //myAgent->alwaysExplore();
-    bool win = false;
+
     myAgent->getCurrentState()->updateLegalMoves(myboard);
     myAgent->getCurrentState()->id = 1;
     
@@ -112,9 +118,10 @@ void gameStarter::humanVSAi(agent* myAgent)
     bool AIturn = true;
     for (int i = 0; i < 500; i++)
     {
-        
+        bool win = false;
+        bool draw = false;
       
-        while (!win)
+        while (!win && !draw)
         {
             State* current_state = myAgent->getCurrentState();
             if (AIturn)
@@ -153,7 +160,7 @@ void gameStarter::humanVSAi(agent* myAgent)
                     {
                         std::cout << " Human wins";
                     }
-                    win = false; 
+                    win = true; 
                     myAgent->agentCleanUp();
                     myboard->startNewGame();
                     AIturn = false;
@@ -161,6 +168,7 @@ void gameStarter::humanVSAi(agent* myAgent)
                 }
                 else if (myboard->checkDraw())
                 {
+                    draw = true;
                     std::cout << "draw";
                     myAgent->agentCleanUp();
                     myboard->startNewGame();
@@ -183,5 +191,79 @@ void gameStarter::humanVSAi(agent* myAgent)
             }
         }
     }
+
+}
+
+
+void gameStarter::AIvsAI(agent* myAgent1,agent* myAgent2)
+{
+    agent* myAgentList[2] = { myAgent1,myAgent2 };
+    myboard->startNewGame();
+    agent* myAgent;
+ 
+    bool win = false;
+    bool draw = false;
+    for (int i = 1; i >=0; i--)
+    {
+        myAgent = myAgentList[i];
+        myAgent->agentCleanUp();
+        myAgent->setAlwaysGreed();
+        myAgent->getCurrentState()->updateLegalMoves(myboard);
+        myAgent->getCurrentState()->id = 1;
+    }
+
+
+    while (!win && !draw)
+    {
+        State* current_state = myAgent->getCurrentState();
+        int current_total = myAgent->gettotal_states();
+        bool minOrMax = myboard->getCounter() % 2;
+
+        myAgent->takeAction(minOrMax);//if counter 2 false 
+        int pos = myAgent->getAction();
+        if (myboard->legalMove(pos))
+        {
+            myboard->setCounter(pos);
+            myAgent->afterActionUpdates(current_state->getBoardStateRepresentation(), pos, myboard->getCounter(), myboard);
+            current_state = myAgent->getCurrentState(); 
+           
+
+            win = myboard->checkallwin(pos);
+            if (win)
+            {
+                //std::cout << "noice";
+                win = true;
+                myboard->startNewGame();
+                myAgent->increaseWins();
+                myAgent1->agentCleanUp();
+                myAgent2->agentCleanUp();
+
+
+            }
+            else if (myboard->checkDraw())
+            {
+                draw = true;
+                myboard->startNewGame();
+                myAgent1->agentCleanUp();
+                myAgent2->agentCleanUp();
+            }
+            else
+            {
+                myboard->switchCounter();
+               
+
+
+                myAgent = myAgentList[myboard->getCounter() - 1];
+                myAgent->setCurrentState(current_state);
+            }
+            //myboard->presentBoard();
+        }
+        else
+        {
+            myboard->presentBoard();
+        }
+    }
+    
+
 
 }

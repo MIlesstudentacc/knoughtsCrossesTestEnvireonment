@@ -12,5 +12,6 @@ public:
 
 	void humanVSAi(agent* myAgent);
 
+	void AIvsAI(agent* myAgent1, agent* myAgent2);
 };
 

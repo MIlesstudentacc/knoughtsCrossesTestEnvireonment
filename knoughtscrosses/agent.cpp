@@ -318,4 +318,19 @@ bool agent::getBackPropType()
 	return TDOrCarlo;
 }
 
+void agent::increaseWins()
+{
+	gamesWon = gamesWon++;
+}
+
+int agent::getWins()
+{
+	return gamesWon;
+}
+
+void agent::setCurrentState(State* currentState)
+{
+	this->currentState = currentState; 
+}
+
 

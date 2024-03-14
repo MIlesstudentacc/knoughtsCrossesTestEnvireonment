@@ -8,6 +8,8 @@ private:
 
 	bool TDOrCarlo;
 
+	int gamesWon = 0;
+
 	int episodes = 0; 
 
 	std::vector<State*> episode; 
@@ -37,7 +39,7 @@ private:
 
 	int latest_id = 1;
 
-	int target_Episodes = 1000000;
+	int target_Episodes = 200;
 public:
 
 	agent(bool TDOrCarlo); 
@@ -97,5 +99,11 @@ public:
 	void TDCalc(double reward);
 
 	bool getBackPropType();
+
+	void increaseWins();
+
+	int getWins();
+
+	void setCurrentState(State* currentState);
 };
 
