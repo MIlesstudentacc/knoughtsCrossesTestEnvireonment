@@ -333,4 +333,9 @@ void agent::setCurrentState(State* currentState)
 	this->currentState = currentState; 
 }
 
+void agent::setNewEpisodes(int newTargetEpisodes)
+{
+	target_Episodes = newTargetEpisodes;
+}
+
 

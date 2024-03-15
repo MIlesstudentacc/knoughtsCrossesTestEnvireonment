@@ -39,7 +39,9 @@ private:
 
 	int latest_id = 1;
 
-	int target_Episodes = 200;
+
+
+	int target_Episodes = 5;
 public:
 
 	agent(bool TDOrCarlo); 
@@ -105,5 +107,7 @@ public:
 	int getWins();
 
 	void setCurrentState(State* currentState);
+
+	void setNewEpisodes(int newTargetEpisodes);
 };
 

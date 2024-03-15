@@ -7,41 +7,66 @@
 #include <thread>
 int main()
 {
-    std::vector<double> tdWinrates;
+    std::vector<double> monteWinrates;
     srand((unsigned)time(NULL));
-    agent* TdAgent = new agent(true); 
+    agent* TdAgent = new agent(true);
     agent* monteAgent = new agent(false);
-    gameStarter* myStarter = new gameStarter(); 
-    gameStarter* myStarter2 = new gameStarter(); 
+    gameStarter* myStarter = new gameStarter();
+    gameStarter* myStarter2 = new gameStarter();
     //myStarter->AISelfPlay(TdAgent);
     //myStarter->humanVSAi(TdAgent);
-    int tdWins;
-    int monteWins;
-    for (int i = 0; i < 10; i++)
+    int tdWins = 0;
+    int monteWins = 0;
+    int totalWins = 0;
+    for (int k = 0; k < 10; k++)
     {
-
-
-        std::thread carloThread(&gameStarter::AISelfPlay, myStarter, std::ref(monteAgent));
-        std::thread TDThread(&gameStarter::AISelfPlay, myStarter2, std::ref(TdAgent));
-        carloThread.join();
-        TDThread.join();
-        myStarter->AIvsAI(TdAgent, monteAgent);
-
-        tdWins = TdAgent->getWins();
-        monteWins = monteAgent->getWins();
-
-        int total_Wins = tdWins + monteWins;
-        if (total_Wins > 0)
+        agent* TdAgent = new agent(true);
+        agent* monteAgent = new agent(false);
+        for (int j = 0; j < 10; j++)
         {
-            double percentTd = tdWins / total_Wins;
+            for (int i = 0; i < 10; i++)
+            {
 
-            tdWinrates.push_back(percentTd);
+
+                std::thread carloThread(&gameStarter::AISelfPlay, myStarter, std::ref(monteAgent));
+                std::thread TDThread(&gameStarter::AISelfPlay, myStarter2, std::ref(TdAgent));
+                carloThread.join();
+                TDThread.join();
+                myStarter->AIvsAI(TdAgent, monteAgent);
+
+                tdWins = TdAgent->getWins();
+                monteWins = monteAgent->getWins();
+
+
+
+
+
+            }
+            totalWins = totalWins + tdWins + monteWins;
+            if (totalWins > 0)
+            {
+
+                double percentTd = (double)tdWins / totalWins;
+                double percentMonte = (double)monteWins / totalWins;
+                monteWinrates.push_back(percentMonte);
+                tdWinrates.push_back(percentTd);
+            }
+            int total_Episode = TdAgent->returntargetEpisodes();
+            total_Episode = total_Episode * 2;
+            TdAgent->setNewEpisodes(total_Episode);
         }
+        free(TdAgent);
+        free(monteAgent);
     }
-    std::cout << tdWins << std::endl;
-    std::cout << monteWins << std::endl;
-   
+        for (int i = 0; i < monteWinrates.size(); i++)
+        {
+
+            std::cout << monteWinrates[i] << std::endl;
+            std::cout << tdWinrates[i] << std::endl;
+        }
+
     
+
     
     
 
